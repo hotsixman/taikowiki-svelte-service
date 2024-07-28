@@ -49,6 +49,7 @@
     import User from "$lib/components/layout/main/User.svelte";
     import axios from "axios";
     import Footer from "$lib/components/layout/main/Footer.svelte";
+    import AsideItem from "$lib/components/layout/main/AsideItem.svelte";
 
     export let data;
     //deepFreeze songs
@@ -158,6 +159,9 @@
         </svelte:fragment>
         <Aside slot="aside">
             <div bind:this={$pageAside} class="page-aside" />
+            <a href="https://gall.dcinside.com/mgallery/board/view/?id=taiko&no=185823&page=1" target="_blank">
+                <img src="/assets/img/competition.png" alt="competition" style="width:100%;height:auto;border-radius:10px;"/>
+            </a>
             <AsideNewSong newSongs={data.newSongs} />
         </Aside>
     </Main>
