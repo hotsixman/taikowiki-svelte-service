@@ -80,7 +80,7 @@
             if (response.status === "success") {
                 user.set(response.data);
             }
-        });
+        })
     }
 </script>
 
