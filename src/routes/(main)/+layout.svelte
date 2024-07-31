@@ -29,8 +29,6 @@
 </script>
 
 <script lang="ts">
-    import GoogleTag from "$lib/components/layout/google-tag.svelte";
-    import VercelInject from "$lib/components/layout/vercel-inject.svelte";
     import { browser } from "$app/environment";
     import Aside from "$lib/components/layout/main/Aside.svelte";
     import AsideNewSong from "$lib/components/layout/main/Aside-NewSong.svelte";
@@ -47,9 +45,8 @@
     import { setContext } from "svelte";
     import { beforeNavigate } from "$app/navigation";
     import User from "$lib/components/layout/main/User.svelte";
-    import axios from "axios";
     import Footer from "$lib/components/layout/main/Footer.svelte";
-    import AsideItem from "$lib/components/layout/main/AsideItem.svelte";
+    import { userRequestor } from "$lib/module/common/user/user.client.js";
 
     export let data;
     //deepFreeze songs
@@ -79,11 +76,10 @@
     const user = writable<{ logined: boolean; nickname: string }>(data.user);
     setContext("user", user);
     $: if (($navigating || $page.state) && browser) {
-        axios({
-            method: "get",
-            url: "/api/user",
-        }).then(({ data }) => {
-            user.set(data);
+        userRequestor.getUserData(null).then((response) => {
+            if (response.status === "success") {
+                user.set(response.data);
+            }
         });
     }
 </script>
@@ -143,7 +139,7 @@
                 mobileHideSlot
             >
                 <span class="header-text">{i18nLayout.gamecenter}</span>
-            </HeaderItem>            
+            </HeaderItem>
         </svelte:fragment>
         <svelte:fragment slot="right">
             <User />
@@ -159,17 +155,21 @@
         </svelte:fragment>
         <Aside slot="aside">
             <div bind:this={$pageAside} class="page-aside" />
-            <a href="https://gall.dcinside.com/mgallery/board/view/?id=taiko&no=185823&page=1" target="_blank">
-                <img src="/assets/img/competition.png" alt="competition" style="width:100%;height:auto;border-radius:10px;"/>
+            <a
+                href="https://gall.dcinside.com/mgallery/board/view/?id=taiko&no=185823&page=1"
+                target="_blank"
+            >
+                <img
+                    src="/assets/img/competition.png"
+                    alt="competition"
+                    style="width:100%;height:auto;border-radius:10px;"
+                />
             </a>
             <AsideNewSong newSongs={data.newSongs} />
         </Aside>
     </Main>
     <Footer version={data.version} />
 </div>
-
-<GoogleTag/>
-<VercelInject/>
 
 <style>
     :global(body[data-theme="light"]) {
