@@ -21,9 +21,8 @@
 
     import SongEditor from "$lib/components/common/song/editor/SongEditor.svelte";
     import type { SongData } from "$lib/module/common/song/types";
-    import axios from "axios";
     import { page } from "$app/stores";
-    import { songA, songAdminRequestorsongAdminRequestor } from "$lib/module/common/song/song.client.js";
+    import { songAdminRequestor } from "$lib/module/common/song/song.client";
 
     export let data;
 </script>
