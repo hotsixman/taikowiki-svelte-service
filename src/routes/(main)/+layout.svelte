@@ -44,7 +44,7 @@
     import i18n, { setI18N, useLang } from "$lib/module/common/i18n/i18n";
     import { writable, get, type Writable } from "svelte/store";
     import { type PathLangFile } from "$lib/module/common/i18n/types.js";
-    import { setContext } from "svelte";
+    import { onMount, setContext } from "svelte";
     import { beforeNavigate } from "$app/navigation";
     import User from "$lib/components/layout/main/User.svelte";
     import Footer from "$lib/components/layout/main/Footer.svelte";
@@ -82,6 +82,10 @@
             }
         });
     }
+
+    onMount(() => {
+        console.log(' · · – ·　 · · · ·　 · – · ·　 ·　　　 · – – ·　 –　　　 – – · ·　 – · ·　 – · –　 · · · ·　 · · –　 – – · ·　 –　 – · –　 – · – –　 – – ·　 –　　　 – · · ·　 · · · ·　 · · –　 – – ·　 – · · ·　 ·　 – –　 · – · ·　 · – · ·　 ·　 – – ·　 –　　　 · · – ·　 –　 – –　 · · · ·　　　 · – – –　 · · –　 – –　 – · · ·　 – · ·　 · – –　 · · – ·　 · · –　 – · · ·　 ·　　　 · – ·　 · – ·　　');
+    })
 </script>
 
 <svelte:head>
