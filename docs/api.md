@@ -40,7 +40,7 @@ responseType: string
 ```
 
 Sends the latest update time (UPDATE_TIME) of the \`song\` table in the database as a Unix time in milliseconds.
-## 유저
+## User
 
 ### /user
 ```ts
@@ -50,8 +50,47 @@ responseType: {
     nickname: string //user nickname or ip address
 }
 ```
-
 Retrieves the login status and the user's nickname or IP address.
+
+### /user/rating
+```ts
+method: "GET"
+responseType: {
+    currentRating: number,
+    currentExp: number | null,
+    ratingDataWithScoreData: { 
+        songNo: number,
+        difficulty: 'oni' | 'ura', 
+        songRating: {
+            value: number,
+            accuracy: number,
+            measureValue: number
+        },
+        scoreData: {
+            crown: 'played' | 'silver' | 'gold' | 'donderfull' | null;
+            badge: 'rainbow' | 'purple' | 'pink' | 'gold' | 'silver' | 'bronze' | 'white' | null;
+            score: number,
+            ranking: number,
+            good: number,
+            ok: number,
+            bad: number,
+            maxCombo: number,
+            roll: number,
+            count: {
+                play: number,
+                clear: number,
+                fullcombo: number,
+                donderfullcombo: number,
+            }
+        } | null
+    }[]
+}
+params: {
+    all?: ['true'] // If "true", server will send all song rating datas. If not, server will only send top 50 song rating datas.
+}
+```
+
+###
 
 # Internal Use APIs
 
