@@ -1,8 +1,12 @@
 <script lang="ts">
     import { getTheme } from "$lib/module/layout/theme";
 
-    export let title: string;
-    export let songNo: string;
+    interface Props {
+        title: string;
+        songNo: string;
+    }
+
+    let { title, songNo }: Props = $props();
 
     const [theme] = getTheme();
 </script>
@@ -16,6 +20,7 @@
             class="icon-anchor"
             href={`https://www.youtube.com/results?search_query=${encodeURIComponent(`太鼓の達人 ${title}`)}`}
             data-theme={$theme}
+            target="_blank"
         >
             <img class="icon" src="/assets/icon/youtube.svg" alt="edit" />
         </a>
@@ -51,8 +56,8 @@
         font-size: 35px;
     }
 
-    .icon-container{
-        display:flex;
+    .icon-container {
+        display: flex;
         flex-direction: row;
         margin-top: 13px;
 

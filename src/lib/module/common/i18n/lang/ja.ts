@@ -194,7 +194,8 @@ const newJa: RecursiveStringRecord = {
                 ko: '韓国語',
                 aliasKo: '韓国語(非公式)',
                 en: '英語',
-                aliasEn: '英語(非公式)'
+                aliasEn: '英語(非公式)',
+                romaji: 'ローマ字'
             },
             songData: {
                 version: '収録 バージョン',
@@ -457,9 +458,12 @@ const ja: LangFile = {
             classic: 'クラシック'
         },
         languages: {
-            jp: '日本語',
+            ja: '日本語',
             ko: '韓国語',
-            ako: '韓国語(非公式)'
+            ako: '韓国語(非公式)',
+            en: '英語',
+            aen: '英語(非公式)',
+            rom: 'ローマ字'
         }
     },
     '/song/[songNo]': {

@@ -2,13 +2,21 @@
     // @ts-nocheck
     import TitledContainer from "$lib/components/common/TitledContainer.svelte";
     import CourseEditor from "$lib/components/common/song/editor/CourseEditor.svelte";
+    import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import { DIFFICULTY } from "$lib/module/common/song/const";
     import type { SongData } from "$lib/module/common/song/types";
 
-    export let courses: SongData["courses"];
+    interface Props{
+        courses: SongData["courses"]
+    }
+
+    let {courses = $bindable()}: Props = $props();
+
+    const lang = getLang();
+    let i18n = $derived(getI18N($lang).component.SongEditor.CoursesEditor);
 </script>
 
-<TitledContainer title="보면" color="#cf4844">
+<TitledContainer title={i18n.course} color="#cf4844">
     <div>
         {#each DIFFICULTY as difficulty}
             <CourseEditor {difficulty} bind:course={courses[difficulty]} />

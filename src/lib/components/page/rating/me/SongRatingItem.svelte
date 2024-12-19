@@ -11,15 +11,23 @@
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
 
-    export let songRatingData: ReturnType<
-        typeof getRating
-    >["songRatingDatas"][number];
-    export let songDifficultyScoreData: DifficultyScoreData;
-    export let songData: Pick<SongData, "songNo" | "title">;
-    export let isTop50: boolean;
-    export let order: number;
+    interface Props {
+        songRatingData: ReturnType<typeof getRating>["songRatingDatas"][number];
+        songDifficultyScoreData: DifficultyScoreData;
+        songData: Pick<SongData, "songNo" | "title">;
+        isTop50: boolean;
+        order: number;
+    }
 
-    let opened = false;
+    let {
+        songRatingData,
+        songDifficultyScoreData,
+        songData,
+        isTop50,
+        order,
+    }: Props = $props();
+
+    let opened = $state(false);
     function toggle() {
         opened = !opened;
     }
@@ -27,8 +35,8 @@
     const isMobile = getIsMobile();
     const [theme] = getTheme();
     const lang = getLang();
-    $: i18n = getI18N("/auth/user/donder", $lang);
-    $: newI18n = getI18N($lang).page.donder;
+    let i18n = $derived(getI18N("/auth/user/donder", $lang));
+    let newI18n = $derived(getI18N($lang).page.donder);
 
     function getDiffNum(diff: "oni" | "ura") {
         if (diff === "oni") {
@@ -65,12 +73,13 @@
             <div class="detail-head">
                 <div class="detail-preview" data-isMobile={$isMobile}>
                     <div class="detail-layer1">
-                        <div
+                        <a
                             class="song-title"
                             style={`color:${color.difficulty[songRatingData.difficulty]};`}
+                            href={`/song/${songRatingData.songNo}?diff=${songRatingData.difficulty}`}
                         >
                             {songData.title}
-                        </div>
+                        </a>
                     </div>
                     <div class="detail-layer2">
                         <div class="crown-wrapper" title={i18n.crown}>
@@ -250,7 +259,7 @@
 
         width: 250px;
 
-        & > div:not(.crown-wrapper){
+        & > div:not(.crown-wrapper) {
             width: calc((100% - 34px) / 3);
         }
     }

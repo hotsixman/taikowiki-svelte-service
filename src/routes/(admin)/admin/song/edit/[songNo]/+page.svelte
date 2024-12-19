@@ -1,4 +1,4 @@
-<script lang="ts" context="module">
+<script lang="ts" module>
     async function upload(songNo: string, songData: Partial<SongData>) {
         if (!songData.title || !songData.songNo) {
             alert("곡 번호와 제목을 입력해주세요.");
@@ -21,17 +21,19 @@
 
     import SongEditor from "$lib/components/common/song/editor/SongEditor.svelte";
     import type { SongData } from "$lib/module/common/song/types";
-    import axios from "axios";
     import { page } from "$app/stores";
     import { songAdminRequestor } from "$lib/module/common/song/song.client.js";
 
-    export let data;
+    let {data} = $props();
+    let songData = $state(data.song);
+
+    $inspect(songData);
 </script>
 
-<SongEditor bind:songData={data.song} type="edit" isAdmin={true}/>
+<SongEditor bind:songData type="edit" isAdmin={true}/>
 <button
-    on:click={() => {
-        upload($page.params.songNo, data.song).then(() => {
+    onclick={() => {
+        upload($page.params.songNo, songData).then(() => {
             goto("/admin/song");
         });
     }}
