@@ -3,18 +3,29 @@
     import { getIsMobile } from "$lib/module/layout/isMobile";
     import { getTheme } from "$lib/module/layout/theme";
 
-    export let titleKo: string | null = null;
-    export let titleEn: string | null = null;
-    export let aliasKo: string | null = null;
-    export let aliasEn: string | null = null;
+    interface Props {
+        titleKo?: string | null;
+        titleEn?: string | null;
+        aliasKo?: string | null;
+        aliasEn?: string | null;
+        romaji?: string | null;
+    }
+
+    let {
+        titleKo = null,
+        titleEn = null,
+        aliasKo = null,
+        aliasEn = null,
+        romaji = null,
+    }: Props = $props();
 
     const [theme] = getTheme();
     const isMobile = getIsMobile();
 
     const lang = getLang();
-    $: i18n = getI18N($lang).page.songNo.multipleTitle;
+    let i18n = $derived(getI18N($lang).page.songNo.multipleTitle);
 
-    let opened = false;
+    let opened = $state(false);
 </script>
 
 {#if titleKo || titleEn || aliasKo || aliasEn}
@@ -22,7 +33,7 @@
         <div
             class="title"
             class:opened
-            on:click={() => {
+            onclick={() => {
                 opened = !opened;
             }}
             role="presentation"
@@ -32,38 +43,48 @@
         </div>
         <div class="table-container" class:opened>
             <table data-theme={$theme}>
-                {#if titleKo}
-                    <tr>
-                        <td> {i18n.ko} </td>
-                        <td>
-                            {titleKo}
-                        </td>
-                    </tr>
-                {/if}
-                {#if aliasKo}
-                    <tr>
-                        <td> {i18n.aliasKo} </td>
-                        <td>
-                            {aliasKo}
-                        </td>
-                    </tr>
-                {/if}
-                {#if titleEn}
-                    <tr>
-                        <td> {i18n.en} </td>
-                        <td>
-                            {titleEn}
-                        </td>
-                    </tr>
-                {/if}
-                {#if aliasEn}
-                    <tr>
-                        <td> {i18n.aliasEn} </td>
-                        <td>
-                            {aliasEn}
-                        </td>
-                    </tr>
-                {/if}
+                <tbody>
+                    {#if titleKo}
+                        <tr>
+                            <td> {i18n.ko} </td>
+                            <td>
+                                {titleKo}
+                            </td>
+                        </tr>
+                    {/if}
+                    {#if aliasKo}
+                        <tr>
+                            <td> {i18n.aliasKo} </td>
+                            <td>
+                                {aliasKo}
+                            </td>
+                        </tr>
+                    {/if}
+                    {#if titleEn}
+                        <tr>
+                            <td> {i18n.en} </td>
+                            <td>
+                                {titleEn}
+                            </td>
+                        </tr>
+                    {/if}
+                    {#if aliasEn}
+                        <tr>
+                            <td> {i18n.aliasEn} </td>
+                            <td>
+                                {aliasEn}
+                            </td>
+                        </tr>
+                    {/if}
+                    {#if romaji}
+                        <tr>
+                            <td> {i18n.romaji} </td>
+                            <td>
+                                {romaji}
+                            </td>
+                        </tr>
+                    {/if}
+                </tbody>
             </table>
         </div>
     </div>
