@@ -3,22 +3,30 @@
     import { getTheme } from "$lib/module/layout/theme";
     import { getI18N, getLang } from "$lib/module/common/i18n/i18n";
     import { DateTime } from "luxon";
+    import { onMount } from "svelte";
 
     interface Props {
         donderData: UserDonderData;
         loaded?: boolean;
+        isDownload?: boolean;
     }
 
-    let { donderData, loaded = $bindable(false) }: Props = $props();
+    let {
+        donderData,
+        loaded = $bindable(false),
+        isDownload = false,
+    }: Props = $props();
 
     const [theme] = getTheme();
     const lang = getLang();
     let i18n = $derived(getI18N("/auth/user/donder", $lang));
 </script>
 
-<div class="container">
+{#snippet donderImg()}
     <img
-        src={donderData.donder.myDon}
+        src={isDownload
+            ? `/api/hirobaimg/mydon/${donderData.donder.taikoNumber}`
+            : donderData.donder.myDon}
         alt={i18n.myDon}
         onload={() => {
             loaded = true;
@@ -27,6 +35,8 @@
             loaded = true;
         }}
     />
+{/snippet}
+{#snippet donderProfile()}
     <div class="div-table" data-theme={$theme}>
         <div class="div-tr">
             <div class="div-td taikonumber">
@@ -39,11 +49,21 @@
             </div>
         </div>
     </div>
-    <div class="last-update">
-        {i18n.lastUpdate}: {DateTime.fromJSDate(donderData.lastUpdate).toFormat(
-            "yyyy-MM-dd HH:mm:ss",
-        )}
-    </div>
+{/snippet}
+{#snippet lastUpdate()}
+    {#if !isDownload}
+        <div class="last-update">
+            {i18n.lastUpdate}: {DateTime.fromJSDate(
+                donderData.lastUpdate,
+            ).toFormat("yyyy-MM-dd HH:mm:ss")}
+        </div>
+    {/if}
+{/snippet}
+
+<div class="container">
+    {@render donderImg()}
+    {@render donderProfile()}
+    {@render lastUpdate()}
 </div>
 
 <style>
