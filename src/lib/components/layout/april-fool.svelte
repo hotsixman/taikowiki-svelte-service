@@ -53,7 +53,16 @@
             clearInterval(interval);
         }
     }
+    function once(fn: any) {
+		return function (event: any) {
+            //@ts-expect-error
+			if (fn) fn.call(this, event);
+			fn = null;
+		};
+	}
 </script>
+
+<svelte:body ondblclick={once(stopRotate)}></svelte:body>
 
 {#if useRotate}
     {#key styleText}
