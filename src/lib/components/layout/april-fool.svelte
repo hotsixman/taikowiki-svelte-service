@@ -6,7 +6,9 @@
         typeof window === "undefined"
             ? true
             : window.localStorage.getItem("useRotate")
-              ? window.localStorage.getItem("useRotate") === "false" ? false : true
+              ? window.localStorage.getItem("useRotate") === "false"
+                  ? false
+                  : true
               : true,
     );
     let speed = $state(1.01);
@@ -15,20 +17,25 @@
 
     onMount(() => {
         if (useRotate) {
-            if($lang === "ko"){
+            if ($lang === "ko") {
                 alert("무슨 일이 생기면 화면을 두 번 클릭 또는 터치하세요!");
-            }
-            else{
-                alert("If something happens, double-click or touch the screen!");
+            } else {
+                alert(
+                    "If something happens, double-click or touch the screen!",
+                );
             }
             interval = setInterval(() => {
-                if(speed < 10000000){
+                if (speed < 10000000) {
                     speed **= 1.002;
                 }
             }, 1);
-            document.body.addEventListener('dblclick', () => {
-                stopRotate();
-            }, {once: true})
+            document.body.addEventListener(
+                "dblclick",
+                () => {
+                    stopRotate();
+                },
+                { once: true },
+            );
         }
     });
     onDestroy(() => {
@@ -37,36 +44,19 @@
         }
     });
 
-    let styleText = $derived(`
-        <style>
-            @keyframes rotation {
-                0% {
-                    transform: rotate(0deg);
-                }
-                100% {
-                    transform: rotate(360deg);
-                }
-            }
-            body:has(#aprilFool) {
-                animation: rotation ${1000000 / speed}s linear infinite;
-            }
-        </style>`);
+    let styleText = $derived(`<style>@keyframes rotation {0% {transform: rotate(0deg);}100% {transform: rotate(360deg);}}body {animation: rotation ${1000000 / speed}s linear infinite;}</style>`);
 
     function stopRotate() {
         useRotate = false;
-        if(interval){
+        window.localStorage.setItem("useRotate", "false");
+        if (interval) {
             clearInterval(interval);
         }
-        window.localStorage.setItem("useRotate", "false");
     }
 </script>
 
 {#if useRotate}
-    <div id="aprilFool">
-        {#key styleText}
-            {@html styleText}
-        {/key}
-    </div>
+    {#key styleText}
+        {@html styleText}
+    {/key}
 {/if}
-<style>
-</style>
