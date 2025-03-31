@@ -231,7 +231,7 @@
 
 <ServiceLayout />
 {#if browser}
-<AprilFool/>
+<!--<AprilFool/>-->
 {/if}
 
 <style>

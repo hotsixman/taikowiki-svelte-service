@@ -2,15 +2,7 @@
     import { getLang } from "$lib/module/common/i18n/i18n";
     import { onDestroy, onMount } from "svelte";
 
-    let useRotate = $state(
-        typeof window === "undefined"
-            ? true
-            : window.localStorage.getItem("useRotate")
-              ? window.localStorage.getItem("useRotate") === "false"
-                  ? false
-                  : true
-              : true,
-    );
+    let useRotate = $state(localStorage?.useRotate === "false" ? false : true);
     let speed = $state(1.01);
     let interval = $state<any>();
     let lang = getLang();
@@ -44,7 +36,9 @@
         }
     });
 
-    let styleText = $derived(`<style>@keyframes rotation {0% {transform: rotate(0deg);}100% {transform: rotate(360deg);}}body {animation: rotation ${1000000 / speed}s linear infinite;}</style>`);
+    let styleText = $derived(
+        `<style>@keyframes rotation {0% {transform: rotate(0deg);}100% {transform: rotate(360deg);}}body {animation: rotation ${1000000 / speed}s linear infinite;}</style>`,
+    );
 
     function stopRotate() {
         useRotate = false;
@@ -54,18 +48,20 @@
         }
     }
     function once(fn: any) {
-		return function (event: any) {
+        return function (event: any) {
             //@ts-expect-error
-			if (fn) fn.call(this, event);
-			fn = null;
-		};
-	}
+            if (fn) fn.call(this, event);
+            fn = null;
+        };
+    }
 </script>
 
-<svelte:body ondblclick={once(stopRotate)}></svelte:body>
+<svelte:body ondblclick={once(stopRotate)} />
 
-{#if useRotate}
-    {#key styleText}
-        {@html styleText}
-    {/key}
-{/if}
+<div>
+    {#if useRotate}
+        {#key styleText}
+            {@html styleText}
+        {/key}
+    {/if}
+</div>
