@@ -36,9 +36,14 @@
         }
     });
 
-    let styleText = $derived(
-        `<style>@keyframes rotation {0% {transform: rotate(0deg);}100% {transform: rotate(360deg);}}body {animation: rotation ${1000000 / speed}s linear infinite;}</style>`,
-    );
+    $effect(() => {
+        if(useRotate){
+            document.body.style.animation = `rotation ${1000000 / speed}s linear infinite`;
+        }
+        else{
+            document.body.style.animation = '';
+        }
+    })
 
     function stopRotate() {
         useRotate = false;
@@ -58,10 +63,13 @@
 
 <svelte:body ondblclick={once(stopRotate)} />
 
-<div>
-    {#if useRotate}
-        {#key styleText}
-            {@html styleText}
-        {/key}
-    {/if}
-</div>
+<style>
+    @keyframes rotation {
+        0% {
+            transform: rotate(0deg);
+        }
+        100% {
+            transform: rotate(360deg);
+        }
+    }
+</style>
