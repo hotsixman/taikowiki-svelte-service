@@ -197,17 +197,15 @@
         </svelte:fragment>
         <svelte:fragment slot="right">
             <User />
-            <!--
             <HeaderItem
                 icon="/assets/icon/donate.svg"
                 href="/donate"
                 mobileHideSlot
             />
-            -->
         </svelte:fragment>
     </Header>
     <Main>
-        <svelte:fragment slot="main">
+        {#snippet main()}
             {#if $navigating && !($navigating.from?.url.pathname === "/song" && $navigating.to?.url.pathname === "/song")}
                 <Loading />
             {:else}
@@ -216,19 +214,21 @@
                     <ScrollSetter />
                 {/if}
             {/if}
-        </svelte:fragment>
-        <Aside slot="aside">
-            <div bind:this={$pageAside} class="page-aside"></div>
-            {#if data.asideBanners}
-                <AsideBanner banners={data.asideBanners} />
-            {/if}
-            <AsideNewSong newSongs={data.newSongs} />
-        </Aside>
+        {/snippet}
+        {#snippet aside()}
+            <Aside>
+                <div bind:this={$pageAside} class="page-aside"></div>
+                {#if data.asideBanners}
+                    <AsideBanner banners={data.asideBanners} />
+                {/if}
+                <AsideNewSong newSongs={data.newSongs} />
+            </Aside>
+        {/snippet}
     </Main>
     <Footer version={data.version} />
 </div>
 
-<ServiceLayout/>
+<ServiceLayout />
 
 <style>
     .page-aside:empty {

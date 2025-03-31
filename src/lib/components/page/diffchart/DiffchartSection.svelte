@@ -1,46 +1,7 @@
-<script lang="ts" module>
-    function getClearedSongScores(
-        scoreData: SongScore[] | null,
-        songs: Song[],
-    ): SongScore[] {
-        return (
-            scoreData?.filter((score) =>
-                songs.find(
-                    (song) =>
-                        song.songNo === score.songNo &&
-                        score.details[uraToOniUra(song.difficulty)]?.crown !==
-                            "none",
-                ),
-            ) ?? []
-        );
-    }
-
-    function getPlayedSongScores(
-        scoreData: SongScore[] | null,
-        songs: Song[],
-    ): SongScore[] {
-        return (
-            scoreData?.filter((score) =>
-                songs.find(
-                    (song) =>
-                        song.songNo === score.songNo &&
-                        score.details[uraToOniUra(song.difficulty)]?.badge !==
-                            null,
-                ),
-            ) ?? []
-        );
-    }
-
-    function uraToOniUra(diff: Difficulty): DifficultyType {
-        return diff === "ura" ? "oni_ura" : diff;
-    }
-</script>
-
 <script lang="ts">
     import type {
         DifficultyType,
         Section,
-        Song,
         SongScore,
     } from "$lib/module/common/diffchart/types";
     import DiffchartSectionName from "./DiffchartSectionName.svelte";
@@ -53,7 +14,12 @@
         songs: SongDataPickedForDiffchart[];
         theme: string;
         useMobile?: boolean;
-        userScoreData: SongScore[] | null;
+        playedSongScores: SongScore[] | null;
+        userCrownCount: {
+            clearCount: number;
+            fcCount: number;
+            dfcCount: number;
+        } | null;
     }
 
     let {
@@ -61,20 +27,28 @@
         songs,
         theme,
         useMobile = true,
-        userScoreData,
+        playedSongScores,
+        userCrownCount
     }: Props = $props();
 
     let closed = $state(false);
 
-    let clearedSongScores = $derived(getClearedSongScores(userScoreData, section.songs));
-    let playedSongScores = $derived(getPlayedSongScores(userScoreData, section.songs));
-    let clearedSongsCount = $derived(userScoreData ? clearedSongScores.length : null);
+    //let playedSongScores = $derived(getPlayedSongScores(userScoreData, section.songs));
+    //let userCrownCount = $derived(countUserCrown(userScoreData, section.songs));
+
+    /**
+     * "ura"를 "oni_ura"로 바꿉니다.
+     * @param diff
+     */
+     function uraToOniUra(diff: Difficulty): DifficultyType {
+        return diff === "ura" ? "oni_ura" : diff;
+    }
 </script>
 
 <div class="section">
     <DiffchartSectionName
         name={section.name}
-        {clearedSongsCount}
+        {userCrownCount}
         color={section.color}
         backgroundColor={section.backgroundColor}
         {closed}
@@ -88,7 +62,7 @@
                     {songs}
                     {theme}
                     {useMobile}
-                    userScore={playedSongScores.find(
+                    userScore={playedSongScores?.find(
                         (score) => score.songNo === song.songNo,
                     )?.details[uraToOniUra(song.difficulty)] ?? null}
                 />
