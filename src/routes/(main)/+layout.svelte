@@ -46,6 +46,7 @@
     import ScrollSetter from "$lib/components/layout/main/ScrollSetter.svelte";
     import HrefLang from "$lib/components/layout/main/HrefLang.svelte";
     import ServerTheme from "$lib/components/layout/main/ServerTheme.svelte";
+    import Apf from "$lib/components/layout/apf.svelte";
 
     let { data, children } = $props();
     //deepFreeze songs
@@ -123,7 +124,7 @@
 {#key $navigating}
     <HrefLang />
 {/key}
-<ServerTheme/>
+<ServerTheme />
 <img src="/assets/img/logo.webp" class="preview" alt="preview" />
 <div>
     <Header>
@@ -209,6 +210,9 @@
 </div>
 
 <ServiceLayout />
+{#if browser}
+    <Apf />
+{/if}
 
 <style>
     .page-aside:empty {

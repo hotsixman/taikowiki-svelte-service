@@ -20,6 +20,9 @@
                 if (speed < 10000000) {
                     speed **= 1.002;
                 }
+                else if (speed > 10000000){
+                    speed = 10000000;
+                }
             }, 1);
             document.body.addEventListener(
                 "dblclick",
@@ -62,9 +65,9 @@
 </script>
 
 <svelte:body ondblclick={once(stopRotate)} />
-
+{@html `
 <style>
-    @keyframes rotation {
+@keyframes rotation {
         0% {
             transform: rotate(0deg);
         }
@@ -73,3 +76,4 @@
         }
     }
 </style>
+`}
