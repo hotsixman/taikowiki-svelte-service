@@ -1,4 +1,5 @@
 <script lang="ts">
+    import { browser } from "$app/environment";
     import { getLang } from "$lib/module/common/i18n/i18n";
     import { onDestroy, onMount } from "svelte";
 
@@ -8,6 +9,7 @@
     let lang = getLang();
 
     onMount(() => {
+        console.log(0);
         if (useRotate) {
             if ($lang === "ko") {
                 alert("무슨 일이 생기면 화면을 두 번 클릭 또는 터치하세요!");
@@ -19,8 +21,7 @@
             interval = setInterval(() => {
                 if (speed < 10000000) {
                     speed **= 1.002;
-                }
-                else if (speed > 10000000){
+                } else if (speed > 10000000) {
                     speed = 10000000;
                 }
             }, 1);
@@ -40,13 +41,14 @@
     });
 
     $effect(() => {
-        if(useRotate){
-            document.body.style.animation = `rotation ${1000000 / speed}s linear infinite`;
+        if (browser) {
+            if (useRotate) {
+                document.body.style.animation = `rotation ${1000000 / speed}s linear infinite`;
+            } else {
+                document.body.style.animation = "";
+            }
         }
-        else{
-            document.body.style.animation = '';
-        }
-    })
+    });
 
     function stopRotate() {
         useRotate = false;

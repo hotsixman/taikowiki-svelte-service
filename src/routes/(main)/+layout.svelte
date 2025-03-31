@@ -210,9 +210,6 @@
 </div>
 
 <ServiceLayout />
-{#if browser}
-    <Apf />
-{/if}
 
 <style>
     .page-aside:empty {
