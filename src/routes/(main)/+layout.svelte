@@ -230,7 +230,9 @@
 </div>
 
 <ServiceLayout />
+{#if browser}
 <AprilFool/>
+{/if}
 
 <style>
     .page-aside:empty {
