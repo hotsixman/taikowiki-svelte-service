@@ -45,6 +45,7 @@
     import AsideBanner from "$lib/components/layout/main/Aside-Banner.svelte";
     import ScrollSetter from "$lib/components/layout/main/ScrollSetter.svelte";
     import HrefLang from "$lib/components/layout/main/HrefLang.svelte";
+    import AprilFool from "$lib/components/layout/april-fool.svelte";
 
     let { data, children } = $props();
     //deepFreeze songs
@@ -229,6 +230,7 @@
 </div>
 
 <ServiceLayout />
+<AprilFool/>
 
 <style>
     .page-aside:empty {
