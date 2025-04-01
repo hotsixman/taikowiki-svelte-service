@@ -9,7 +9,6 @@
     let lang = getLang();
 
     onMount(() => {
-        console.log(0);
         if (useRotate) {
             if ($lang === "ko") {
                 alert("무슨 일이 생기면 화면을 두 번 클릭 또는 터치하세요!");
@@ -64,9 +63,21 @@
             fn = null;
         };
     }
+    function dbclickify(func: (...args: any[]) => any) {
+        let lastClicked: number | null = null;
+        return function () {
+            if (!lastClicked || Date.now() - lastClicked > 180) {
+                lastClicked = Date.now();
+            } else {
+                //@ts-expect-error
+                func.call(this);
+                lastClicked = null;
+            }
+        };
+    }
 </script>
 
-<svelte:body ondblclick={once(stopRotate)} />
+<svelte:body onclick={once(dbclickify(stopRotate))} />
 {@html `
 <style>
 @keyframes rotation {
