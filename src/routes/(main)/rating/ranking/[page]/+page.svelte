@@ -11,8 +11,8 @@
 
     const lang = getLang();
     let i18n = $derived(getI18N($lang).page.rating.ranking);
-    let titleI18n = $derived(getI18N($lang).title["/rating/ranking"]);
-
+    let titleI18n = $derived(getI18N($lang).title["/rating/ranking"])
+    
     function movePage(p: number) {
         goto(`/rating/ranking/${p}`);
 

@@ -8,10 +8,8 @@ export async function load({ params, locals }) {
         throw error(404);
     }
 
-    const [rankings, count] = await Promise.all([
-        userDonderDBController.getRanking(page),
-        userDonderDBController.count(),
-    ]);
+    const rankings = await userDonderDBController.getRanking(page);
+    const count = await userDonderDBController.count();
 
     const refinedRankings = rankings.map((e) => {
         const data = {
@@ -34,10 +32,10 @@ export async function load({ params, locals }) {
         }
 
         return data;
-    });
+    })
 
     return {
         rankings: refinedRankings,
-        count,
-    };
+        count
+    }
 }

@@ -17,6 +17,7 @@
 </script>
 
 <script lang="ts">
+    import ServiceLayout from "$lib/components/layout/ServiceLayout.svelte";
     import { browser } from "$app/environment";
     import Aside from "$lib/components/layout/main/Aside.svelte";
     import AsideNewSong from "$lib/components/layout/main/Aside-NewSong.svelte";
@@ -180,6 +181,11 @@
         </svelte:fragment>
         <svelte:fragment slot="right">
             <User />
+            <HeaderItem
+                icon="/assets/icon/donate.svg"
+                href="/donate"
+                mobileHideSlot
+            />
         </svelte:fragment>
     </Header>
     <Main>
@@ -204,6 +210,8 @@
     </Main>
     <Footer version={data.version} />
 </div>
+
+<ServiceLayout />
 
 <style>
     .logo {

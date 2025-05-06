@@ -1,3 +1,4 @@
+import type { UserDonderData, UserScoreData } from '$lib/module/common/user/types.js';
 import { userDonderDBController } from '$lib/module/common/user/user.server.js';
 import { error } from '@sveltejs/kit';
 

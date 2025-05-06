@@ -11,7 +11,7 @@
     import PageSelector from "$lib/components/common/PageSelector.svelte";
     import { goto } from "$app/navigation";
 
-    let {data} = $props();
+    let { data } = $props();
 
     let songLang: SongLang = $state("ja");
 

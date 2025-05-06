@@ -9,7 +9,7 @@ import BanController from "$lib/module/server/hooks/ban-controller.server";
 import allowOrigin from "$lib/module/server/hooks/allow-origin";
 import { dynamicHtmlLang } from "$lib/module/server/hooks/dynamicHtmlLang.server";
 
-//import logger from "$lib/module/server/hooks/logger.server";
+import { logger } from "$lib/module/server/hooks/logger.server";
 
 config();
 
@@ -21,14 +21,20 @@ const provider = {
     kakao: new providers.Kakao({
         clientId: process.env.KAKAO_CLIENT_ID ?? "",
         clientSecret: process.env.KAKAO_CLIENT_SECRET ?? ""
-    })
+    }),
+    line: new providers.Line({
+        clientId: process.env.LINE_CLIENT_ID ?? "",
+        clientSecret: process.env.LINE_CLIENT_SECRET ?? ""
+    }, ['profile'])
 }
 
 const authHandle = auth(Object.values(provider), {
     key: process.env.AUTH_KEY ?? '',
     maxAge: 3600 * 24 * 7,
     autoRefreshMaxAge: true,
-    withCredentials: true
+    withCredentials: true,
+    useSubdomain: true,
+    absoluteMaxAge: 3600 * 24 * 30
 })
 
 const getUserData: Handle = async ({ event, resolve }) => {
@@ -46,8 +52,8 @@ const getUserData: Handle = async ({ event, resolve }) => {
     return await resolve(event);
 }
 
-const setAssetsCacheControl: Handle = async({event, resolve}) => {
-    if(event.url.pathname.startsWith('/assets')){
+const setAssetsCacheControl: Handle = async ({ event, resolve }) => {
+    if (event.url.pathname.startsWith('/assets')) {
         event.setHeaders({
             'Cache-Control': `max-age=${3600 * 24 * 7}`
         });
@@ -86,10 +92,10 @@ const checkPermission = checkPermissions([
     }
 ])
 
-const cors = allowOrigin(["https://donderhiroba.jp"], {credentials: true});
+const cors = allowOrigin(["https://donderhiroba.jp"], { credentials: true });
 
 Array.prototype.toSorted = function (compareFn?: any) {
     return [...this].sort(compareFn);
 }
 
-export const handle = sequence(BanController.checkIp, cors, authHandle, getUserData, checkPermission, setAssetsCacheControl, dynamicHtmlLang);
+export const handle = sequence(cors, authHandle, getUserData, logger, BanController.checkIp, checkPermission, setAssetsCacheControl, dynamicHtmlLang);
