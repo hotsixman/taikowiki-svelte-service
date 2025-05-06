@@ -1,4 +1,3 @@
-import type { UserDonderData, UserScoreData } from '$lib/module/common/user/types.js';
 import { userDonderDBController } from '$lib/module/common/user/user.server.js';
 import { error } from '@sveltejs/kit';
 
@@ -10,27 +9,14 @@ export async function load({ params, locals }) {
         throw error(404);
     }
 
-    if(locals.userData && locals.userData.grade >= 10){
-        var refinedData: RefinedData = {
-            UUID: donderData.UUID,
-            currentRating: donderData.currentRating,
-            currentExp: donderData.currentExp,
-            nickname: donderData.donder.nickname,
-            taikoNumber: donderData.donder.taikoNumber,
-            ratingData: donderData.ratingData.slice(0, 50),
-            scoreData: donderData.scoreData
-        }
-    }
-    else{
-        var refinedData: RefinedData = {
-            UUID: donderData.UUID,
-            currentRating: donderData.currentRating,
-            currentExp: donderData.currentExp,
-            nickname: donderData.showRatingNickname ? donderData.donder.nickname : null,
-            taikoNumber: donderData.showRatingTaikoNo ? donderData.donder.taikoNumber : null,
-            ratingData: donderData.showRatingSongs ? donderData.ratingData.slice(0, 50) : null,
-            scoreData: donderData.showRatingSongs ? donderData.scoreData : null
-        }
+    const refinedData = {
+        UUID: donderData.UUID,
+        currentRating: donderData.currentRating,
+        currentExp: donderData.currentExp,
+        nickname: donderData.showRatingNickname || isGrade10(locals) ? donderData.donder.nickname : null,
+        taikoNumber: donderData.showRatingTaikoNo || isGrade10(locals) ? donderData.donder.taikoNumber : null,
+        ratingData: donderData.showRatingSongs || isGrade10(locals) ? donderData.ratingData.slice(0, 50) : null,
+        scoreData: donderData.showRatingSongs || isGrade10(locals) ? donderData.scoreData : null
     }
 
     return {
@@ -38,12 +24,8 @@ export async function load({ params, locals }) {
     }
 }
 
-interface RefinedData{
-    UUID: string,
-    currentRating: number,
-    currentExp: number | null,
-    nickname: string | null,
-    taikoNumber: string | null,
-    ratingData: UserDonderData['ratingData'],
-    scoreData: UserScoreData | null
+function isGrade10(locals: App.Locals){
+    if(!locals.userData) return false;
+    if(locals.userData.grade < 10) return false;
+    return true;
 }
