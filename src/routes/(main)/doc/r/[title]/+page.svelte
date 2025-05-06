@@ -39,5 +39,5 @@
             <DocIndex contentTree={docData.contentTree} />
         {/if}
     {/if}
-    <!--<DocContentView contentTree={docData.contentTree} />-->
+    <DocContentView contentTree={docData.contentTree} />
 {/if}

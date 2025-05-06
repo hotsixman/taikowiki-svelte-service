@@ -102,13 +102,6 @@
     const isMobile = getIsMobile();
 </script>
 
-<svelte:element this={"style"}>
-    {#if $theme === "light"}
-        {@html hljsLightStyle}
-    {:else}
-        {@html hljsDarkStyle}
-    {/if}
-</svelte:element>
 {#key browser}
     {#await wikiElementsDefined}
         <Loading />
