@@ -56,7 +56,7 @@
     $effect(() => {
         if (browser && $docReady && contentDiv) {
             contentDiv.querySelectorAll("pre > code").forEach((codeElement) => {
-                if(codeElement.classList.length > 0){
+                if (codeElement.classList.length > 0) {
                     hljs.highlightElement(codeElement as HTMLElement);
                 }
             });
@@ -102,6 +102,11 @@
     const isMobile = getIsMobile();
 </script>
 
+{#if $theme === "light"}
+    {@html `<style>${hljsLightStyle}</style>`}
+{:else}
+    {@html `<style>${hljsDarkStyle}</style>`}
+{/if}
 {#key browser}
     {#await wikiElementsDefined}
         <Loading />
