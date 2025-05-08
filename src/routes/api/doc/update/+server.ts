@@ -1,9 +1,12 @@
 import { docDBController } from '$lib/module/common/wikidoc/server/dbController.server.js';
 import { WikiError } from '$lib/module/common/wikidoc/util.js';
-import { error } from '@sveltejs/kit';
+import { error, redirect } from '@sveltejs/kit';
 import { getClientAddress } from "$lib/module/common/util.server";
 
 export async function POST(event) {
+    throw redirect(308, 'https://file.taiko.wiki/update');
+
+    /*
     const { request, locals } = event;
 
     if (!locals.userData) {
@@ -41,4 +44,5 @@ export async function POST(event) {
     }
 
     return new Response();
+    */
 }
