@@ -4,7 +4,7 @@ import { error, redirect } from '@sveltejs/kit';
 import { getClientAddress } from "$lib/module/common/util.server";
 
 export async function POST(event) {
-    throw redirect(308, 'https://file.taiko.wiki/create');
+    throw redirect(308, 'https://file.taiko.wiki/doc/create');
 
     /*
     const { request, locals } = event;
