@@ -1,6 +1,6 @@
 <script lang="ts" module>
-    async function save(data: DiffchartData) {
-        const response = await diffchartRequestor.save(data);
+    async function save(data: Diffchart.DiffchartData) {
+        const response = await Diffchart.Client.request.save(data);
         if (response.status === "success") {
             alert("저장 성공");
         } else {
@@ -9,7 +9,7 @@
     }
 
     async function remove(level: number, type: string) {
-        const response = await diffchartRequestor.remove({
+        const response = await Diffchart.Client.request.remove({
             level,
             type,
         });
@@ -23,12 +23,12 @@
 </script>
 
 <script lang="ts">
-    import DIffchartEditor from "$lib/components/common/diffchart/DIffchart-Editor.svelte";
-    import { diffchartRequestor } from "$lib/module/common/diffchart/diffchart.client";
-    import { type DiffchartData } from "$lib/module/common/diffchart/types";
+    import { Diffchart } from "$lib/module/diffchart";
+    import DiffchartEditor from "../../../common/diffchart/DiffchartEditor.svelte";
+    import "$lib/module/diffchart/diffchart.client";
 
     interface Props {
-        diffchartData: DiffchartData;
+        diffchartData: Diffchart.DiffchartData;
     }
 
     let { diffchartData }: Props = $props();
@@ -111,8 +111,8 @@
 {/if}
 {#if opened}
     <tr>
-        <td colspan="3" style="border: 3px solid red;">
-            <DIffchartEditor bind:diffchart={diffchartData.data} mode="admin" />
+        <td colspan="3" style="border: 3px solid red; text-align: unset;">
+            <DiffchartEditor bind:diffchart={diffchartData.data} />
         </td>
     </tr>
 {/if}
