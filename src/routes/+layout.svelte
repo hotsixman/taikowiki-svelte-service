@@ -5,5 +5,3 @@
 </script>
 
 <StyledCommon/>
-
-<slot/>
