@@ -59,6 +59,9 @@
     //usemobile
     const isMobile = useIsMobile(data.isMobile);
 
+    //timezone
+    Layout.useTimezone(data.timezone);
+
     //lang
     const lang = useLang();
     const {i18n} = I18N;
