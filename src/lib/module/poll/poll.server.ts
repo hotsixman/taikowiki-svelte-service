@@ -417,5 +417,5 @@ namespace PollServer {
 Poll.Server = PollServer;
 
 type P = typeof PollServer;
-export type { P as PollServer };
+export type { P  as PollServer };
 export { Poll };
