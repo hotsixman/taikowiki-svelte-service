@@ -1,13 +1,9 @@
 import { z } from "zod";
-//@ts-ignore
-import { type PollClient } from "./poll.client";
-//@ts-ignore
-import { type PollServer } from "./poll.server";
 
 // client/server
 export namespace Poll {
-    export declare let Client: Readonly<PollClient>;
-    export declare let Server: Readonly<PollServer>;
+    export declare let Client: Readonly<import('./poll.client').PollClient>;
+    export declare let Server: Readonly<import('./poll.server').PollServer>;
 }
 
 // types
