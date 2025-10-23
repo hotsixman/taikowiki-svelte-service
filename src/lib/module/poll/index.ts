@@ -1,6 +1,6 @@
 import { z } from "zod";
-import type { PollClient } from "./poll.client";
-import type { PollServer } from "./poll.server";
+import { type PollClient } from "./poll.client";
+import { type PollServer } from "./poll.server";
 
 // client/server
 export namespace Poll {
