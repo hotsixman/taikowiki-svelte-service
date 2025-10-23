@@ -48,6 +48,10 @@
     import { Doc } from '$lib/module/doc/index.js';
     import { Layout } from "$lib/module/layout/index.js";
 
+    // for service
+    import PcSideAd from "$lib/components/common/advertisement/PCSideAd.svelte";
+    import MobileDefaultAd from "$lib/components/common/advertisement/MobileDefaultAd.svelte";
+
     const { docContext } = Doc;
 
     let { data, children } = $props();
