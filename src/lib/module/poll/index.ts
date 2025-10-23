@@ -6,13 +6,6 @@ import { type PollServer } from "./poll.server";
 export namespace Poll {
     export declare let Client: Readonly<PollClient>;
     export declare let Server: Readonly<PollServer>;
-
-    export async function importClient(){
-        await import('./poll.client');
-    }
-    export async function importServer(){
-        await import('./poll.server');
-    }
 }
 
 // types
