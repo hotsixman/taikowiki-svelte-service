@@ -46,6 +46,9 @@
     import HrefLang from "$lib/components/layout/main/HrefLang.svelte";
     import ServerTheme from "$lib/components/layout/main/ServerTheme.svelte";
     import { Doc } from '$lib/module/doc/index.js';
+    import { Layout } from "$lib/module/layout/index.js";
+
+    // for service
     import PcSideAd from "$lib/components/common/advertisement/PCSideAd.svelte";
     import MobileDefaultAd from "$lib/components/common/advertisement/MobileDefaultAd.svelte";
 

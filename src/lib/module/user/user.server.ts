@@ -450,7 +450,6 @@ namespace UserServer {
 
     export function logout(event: RequestEvent) {
         event.cookies.delete('auth-user', { path: '/' });
-        event.cookies.delete('auth-user', { path: '/', domain: '.taiko.wiki' });
     }
 }
 
