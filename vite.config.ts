@@ -20,5 +20,8 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/hiroimg/, '')
       },
 		},
+	},
+	build: {
+		target: 'esnext'
 	}
 });
