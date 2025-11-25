@@ -197,6 +197,16 @@ export namespace Hooks {
 
         return await resolve(event);
     }
+
+    /**
+     * rating.taiko.wiki 사용
+     */
+    export const ratingRedirect: Handle = async ({ event, resolve }) => {
+        if (event.url.pathname.startsWith('/rating')){
+            throw redirect(301, 'https://rating.taiko.wiki')
+        }
+        return await resolve(event);
+    }
 }
 
 export namespace Hooks {
