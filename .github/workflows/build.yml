@@ -62,4 +62,4 @@ jobs:
                 asset_content_type: application/zip
 
             - name: Request deploy
-              run: bun .github/scripts/deploy.ts --internal-key ${{ secrets.INTERNAL_API_KEY }} --tag "v${{steps.pkg.outputs.version}} - ${{github.run_id}}"
+              run: bun ./.github/script/deploy.ts --internal-key ${{ secrets.INTERNAL_API_KEY }} --tag "v${{steps.pkg.outputs.version}} - ${{github.run_id}}"
