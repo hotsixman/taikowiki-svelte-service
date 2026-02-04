@@ -45,7 +45,7 @@ jobs:
               env:
                 GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
               with:
-                tag_name: ${{github.ref_name}}
+                tag_name: v${{steps.pkg.outputs.version}} - ${{github.run_id}}
                 release_name: v${{steps.pkg.outputs.version}} - ${{github.run_id}}
                 draft: false
                 prerelease: false
@@ -62,4 +62,4 @@ jobs:
                 asset_content_type: application/zip
 
             - name: Request deploy
-              run: bun .github/scripts/deploy.ts --internal-key ${{ secrets.INTERNAL_API_KEY }} --tag ${{ github.ref_name }}
+              run: bun .github/scripts/deploy.ts --internal-key ${{ secrets.INTERNAL_API_KEY }} --tag "v${{steps.pkg.outputs.version}} - ${{github.run_id}}"
