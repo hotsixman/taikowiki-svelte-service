@@ -2,6 +2,7 @@
     const sectionColor: Record<string, string> = {
         SSS: "#B93FEA",
         SS: "#E8348F",
+        "S+": "#db1f00",
         S: "#EF3059",
         A: "#EB7535",
         B: "#E6B439",
@@ -33,7 +34,7 @@
     import { getI18N, getLang } from "$lib/module/i18n";
     import { getContext } from "svelte";
     import type { Writable } from "svelte/store";
-    import type { Diffchart as D } from '$lib/module/diffchart';
+    import type { Diffchart as D } from "$lib/module/diffchart";
 
     let { data } = $props();
     const { songs, diffChartData } = data;
