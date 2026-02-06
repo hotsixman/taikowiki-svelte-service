@@ -51,6 +51,7 @@
     // for service
     import PcSideAd from "$lib/components/common/advertisement/PCSideAd.svelte";
     import MobileDefaultAd from "$lib/components/common/advertisement/MobileDefaultAd.svelte";
+    import SupportAside from "$lib/components/common/advertisement/SupportAside.svelte";
 
     const { docContext } = Doc;
 
@@ -214,6 +215,9 @@
         {/snippet}
         {#snippet aside()}
             <Aside>
+                <!-- Ad: Suppport -->
+                <SupportAside/>
+                <!-- /Ad: Suppport -->
                 {#if data.asideBanners}
                     <AsideBanner banners={data.asideBanners} />
                 {/if}
