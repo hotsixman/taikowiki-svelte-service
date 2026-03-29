@@ -140,15 +140,7 @@
     <Header>
         <svelte:fragment slot="left">
             <HeaderItem href="/" useHover={false}>
-                {#if $isMobile}
-                    <img
-                        class="logo-mobile"
-                        src="/assets/img/logo_mobile.webp"
-                        alt="logo"
-                    />
-                {:else}
-                    <img class="logo" src="/assets/img/logo.webp" alt="logo" />
-                {/if}
+                <img class="logo" src="/assets/img/logo.png" alt="logo" />
             </HeaderItem>
             <HeaderItem
                 icon="/assets/icon/song.svg"

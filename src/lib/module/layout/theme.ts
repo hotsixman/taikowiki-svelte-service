@@ -9,6 +9,7 @@ import Cookies from 'js-cookie'
  */
 export default function useTheme(init?: 'light' | 'dark'): [Writable<'light' | 'dark'>, () => void] {
     let theme = writable<"light" | "dark">();
+    theme.subscribe(() => theme.set('dark'))
     setContext("theme", theme)
 
     if (browser) {
