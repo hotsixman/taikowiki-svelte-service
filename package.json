@@ -38,6 +38,7 @@
 	},
 	"dependencies": {
 		"@lit/task": "^1.0.2",
+		"@sveltejs/adapter-node": "^5.5.4",
 		"@sveltekit-board/oauth": "^0.7.3",
 		"@taiko-wiki/taiko-rating": "1.10.0",
 		"@toast-ui/editor": "^3.2.2",
