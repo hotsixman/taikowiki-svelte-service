@@ -109,21 +109,24 @@ export namespace Hooks {
         return async ({ event, resolve }) => {
             const { locals, url } = event;
 
-            let passed = false;
+            let flag = 0;
             let path: string | undefined;
             let redirectPath: string | undefined;
             for (const option of options) {
-                if (checkPermission(option.path, option.level, option.rule, url, locals.userData)) {
-                    passed = true;
+                const result = checkPermission(option.path, option.level, option.rule, url, locals.userData);
+                if(flag === 0 && result === 1){
+                    flag = 1;
                     break;
                 }
-                else {
+                if(flag === 0 && result === 2){
+                    flag = 2;
                     path = option.path ?? path;
-                    redirectPath = option.redirectPath ?? redirectPath
+                    redirectPath = option.redirectPath ?? redirectPath;
+                    break;
                 }
             }
 
-            if (passed) {
+            if (flag === 0 || flag === 1) {
                 return await resolve(event)
             }
             else if (redirectPath) {
