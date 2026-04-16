@@ -41,7 +41,7 @@
 </script>
 
 {#each linkDatas as linkData}
-    {#if typeof(data.grade) === "number" && data.grade >= linkData.grade}
+    {#if typeof data.grade === "number" && data.grade >= linkData.grade}
         <div>
             <a href={linkData.href}>{linkData.name}</a>
         </div>
@@ -54,6 +54,8 @@
     </div>
 {/if}
 
-<div data-type="upload">
-    <a href="/admin/upload">이미지 업로드</a>
-</div>
+{#if typeof data.grade === "number" && data.grade >= 9}
+    <div data-type="upload">
+        <a href="/admin/upload">이미지 업로드</a>
+    </div>
+{/if}
