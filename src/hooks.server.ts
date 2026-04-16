@@ -32,6 +32,16 @@ const authHandle = auth(Object.values(provider), {
 
 const checkPermission = Hooks.checkPermissions([
     {
+        path: '/admin/song',
+        level: 7,
+        rule: 'startsWith',
+    },
+    {
+        path: '/admin/api/song',
+        level: 7,
+        rule: 'startsWith',
+    },
+    {
         path: '/admin/api',
         level: 9,
         rule: 'startsWith',
@@ -57,4 +67,4 @@ Array.prototype.toSorted = function (compareFn?: any) {
     return [...this].sort(compareFn);
 }
 
-export const handle = sequence(Hooks.logger, Hooks.checkIp, cors, apiCors, authHandle, Hooks.getUserData, checkPermission, Hooks.setAssetsCacheControl, Hooks.dynamicHtmlLang, Hooks.docRedirect);
+export const handle = sequence(Hooks.checkIp, cors, apiCors, authHandle, Hooks.getUserData, Hooks.logger, checkPermission, Hooks.setAssetsCacheControl, Hooks.dynamicHtmlLang, Hooks.ratingRedirect);

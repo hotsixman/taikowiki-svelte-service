@@ -9,6 +9,8 @@ node_modules
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 package-lock.json
+bun.lock
 tests
 
 scripts
+pnpm-lock.yaml

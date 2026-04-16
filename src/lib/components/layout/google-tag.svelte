@@ -1,7 +1,9 @@
 <script>
     import { browser } from "$app/environment";
-    import { page } from "$app/stores";
-    $: if (browser && ($page.url || $page.state)) {
+    import { afterNavigate } from "$app/navigation";
+    import { onMount } from "svelte";
+
+    onMount(() => {
         (function (w, d, s, l, i) {
             w[l] = w[l] || [];
             w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
@@ -12,19 +14,18 @@
             j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
             f.parentNode.insertBefore(j, f);
         })(window, document, "script", "dataLayer", "GTM-PPRX86P3");
-    }
-    $: {
-        if (browser && typeof gtag !== "undefined") {
-            gtag("config", "G-S8TRY8QPYG", {
-                page_title: document.title,
-                page_path: $page.url.pathname,
-            });
-        }
-    }
+    });
+
+    afterNavigate((nav) => {
+        gtag("config", "G-S8TRY8QPYG", {
+            page_title: document.title,
+            page_path: nav.to.url.pathname,
+        });
+    });
 </script>
 
 <svelte:head>
-    <meta name="google-adsense-account" content="ca-pub-1629193017650416">
+    <meta name="google-adsense-account" content="ca-pub-1629193017650416" />
     <script
         async
         src="https://www.googletagmanager.com/gtag/js?id=G-S8TRY8QPYG"

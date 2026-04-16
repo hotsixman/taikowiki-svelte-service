@@ -2,8 +2,13 @@ import type { RequestEvent } from '@sveltejs/kit';
 import type { Song } from '../song';
 import showdown from 'showdown';
 import sqlString_ from 'sqlstring';
-import styled from 'styled-svelte5';
 import cssColorMap from './data/cssColorMap.json';
+const styled = await import('styled-svelte5')
+    .then((module) => module.default)
+    .catch(() => {
+        console.error('Cannot find module \'styled-svelte5\'.');
+        return () => { };
+    });
 
 type Difficulty = Song.Difficulty;
 type Genre = Song.Genre;
@@ -125,11 +130,11 @@ export namespace Util {
     export function colorToHex(color: string): string | null {
         color = color.trim()
         if (color.startsWith('#')) return color;
-        if (color.startsWith('rgb')){
+        if (color.startsWith('rgb')) {
             const matched = color.match(/\d+/g);
-            if(!matched) return null;
+            if (!matched) return null;
             const [r, g, b] = matched.map((e) => Number(e));
-            if(Number.isNaN(r) || Number.isNaN(g) || Number.isNaN(b)) return null;
+            if (Number.isNaN(r) || Number.isNaN(g) || Number.isNaN(b)) return null;
             return `#${r.toString(16)}${g.toString(16)}${b.toString(16)}`
         }
         return cssColorMap[color as keyof typeof cssColorMap] ?? null;
@@ -273,12 +278,27 @@ export namespace Util {
             `
         )
     }
+
+    export function toCSV(data: Record<string, string | number>[]) {
+        if(data.length === 0) return "";
+        let csv = "";
+        const keys = Object.keys(data[0]);
+        csv += keys.map((key) => escapeString(key)).join(', ') + '\n';
+
+        data.forEach((data) => {
+            csv += keys.map((key) => typeof (data[key]) === "string" ? escapeString(data[key]) : data[key]).join(', ') + '\n';
+        });
+
+        return csv;
+
+        function escapeString(str: string) {
+            return `"${str.replaceAll('"', '""')}"`;
+        }
+    }
 }
 
 export namespace Util {
-    export declare namespace Server {
-        function getClientAddress(event: RequestEvent): string
-    }
+    export declare let Server: import('./util.server').UtilServer;
 }
 
 export namespace Util {
@@ -287,5 +307,14 @@ export namespace Util {
         TupleSplit<[...R], N, [...O, F]> : [O, T];
 
     export type Last<T extends readonly any[]> = T extends readonly [...any, infer R] ? R : never;
-    export type MakePromise<T> = T extends Promise<any> ? T : Promise<T>
+    export type MakePromise<T> = T extends Promise<any> ? T : Promise<T>;
+    export type RequestorResponse<T> = (T extends (void | undefined) ? {
+        status: 'success';
+    } : {
+        status: 'success';
+        data: T;
+    }) | {
+        status: 'error';
+        reason?: string;
+    }
 }

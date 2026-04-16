@@ -1,4 +1,3 @@
-import { Util } from '$lib/module/util';
 import type { I18N } from '..';
 
 import ratingUploadGuide from '../md/en/ratingUploadGuide.md?raw';
@@ -21,7 +20,8 @@ const newEn: I18N.RecursiveStringRecord = {
                 login: 'Login',
                 logout: 'Logout',
                 theme: 'Theme',
-                lang: 'Lang'
+                lang: 'Lang',
+                experimental: 'Experimental'
             }
         },
         'dedicated diffchart': {
@@ -62,6 +62,7 @@ const newEn: I18N.RecursiveStringRecord = {
                 aliasKo: 'Korean (unofficial)',
                 titleEn: 'English',
                 aliasEn: 'English (unofficial)',
+                titleZhCN: 'Chinese',
                 romaji: 'Romaji'
             },
             OtherEditor: {
@@ -238,11 +239,12 @@ const newEn: I18N.RecursiveStringRecord = {
                 asiaBanned: 'This song is not available to play in the Asian version.'
             },
             multipleTitle: {
-                translatedTitle: 'Transalted Title',
+                translatedTitle: 'Translated Title',
                 ko: 'Korean',
                 aliasKo: 'Korean(Unofficial)',
                 en: 'English',
                 aliasEn: 'English(Unofficial)',
+                zhCN: 'Chinese',
                 romaji: 'Romaji'
             },
             songData: {
@@ -265,6 +267,21 @@ const newEn: I18N.RecursiveStringRecord = {
                 nthSong: 'th',
                 noDani: 'Dan-i Contained',
                 fumenImage: 'Course Image'
+            },
+            preview: {
+                branch: 'Branch',
+                branches: {
+                    normal: 'Normal',
+                    advanced: 'Professional',
+                    master: 'Master'
+                },
+                mode: 'Mode',
+                modes: {
+                    normal: 'Normal',
+                    fixedScroll: 'Fixed HS',
+                    fixedBPM: 'Fixed BPM'
+                },
+                isAnnotationMode: 'Use Annotations'
             }
         },
         diffchart: {
@@ -482,9 +499,7 @@ const en: I18N.LangFile = {
         crown: 'Crown',
         rating: 'Ratings',
         hiroba: 'Hiroba',
-        measureValue: 'Mesurement',
-        uploadGuide: Util.mdToHtml(ratingUploadGuide),
-        explanation: Util.mdToHtml(ratingExplanation)
+        measureValue: 'Mesurement'
     },
     '/song': {
         placeholder: 'Keywords',
@@ -558,6 +573,7 @@ const en: I18N.LangFile = {
         sections: {
             'SSS': 'SSS',
             'SS': 'SS',
+            'S+': 'S+',
             'S': 'S',
             'A': 'A',
             'B': 'B',

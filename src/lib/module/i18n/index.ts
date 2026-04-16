@@ -2,6 +2,7 @@ import ko from "./lang/ko";
 import en from "./lang/en";
 import ja from "./lang/ja";
 import zhtw from "./lang/zh-tw";
+import zhcn from "./lang/zh-cn";
 import { writable, type Writable } from "svelte/store";
 import { browser } from "$app/environment";
 import { page } from "$app/state";
@@ -15,6 +16,7 @@ export namespace I18N {
         en,
         ja,
         'zh-tw': zhtw,
+        'zh-cn': zhcn,
     }
 
     function getI18nProxy(target: I18N | any) {
@@ -168,7 +170,7 @@ export namespace I18N {
     }
 
     export function getI18N(): Writable<any>;
-    export function getI18N(lang: string): any;
+    export function getI18N(lang: string): typeof ko;
     export function getI18N(key: string, lang: string): any;
     export function getI18N(key?: string, lang?: string) {
         if (key === undefined) {

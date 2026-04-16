@@ -16,35 +16,23 @@ export namespace Hooks {
             const origin = event.request.headers.get('Origin');
             if (!origin) return await resolve(event);
 
-            if (!event.locals.headers) {
-                event.locals.headers = {};
-            }
-
+            const response = await resolve(event);
             if ((allowedOrigin === "*" || origin === allowedOrigin) && event.url.pathname.startsWith(allowedPath)) {
-                event.locals.headers = {
-                    ...event.locals.headers,
-                    "Access-Control-Allow-Origin": origin,
-                    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-                    "Access-Control-Allow-Headers": "Origin, X-Api-Key, X-Requested-With, Content-Type, Accept, Authorization"
-                }
-                if (option) {
-                    if (option?.credentials === true) {
-                        event.locals.headers = {
-                            ...event.locals.headers,
-                            "Access-Control-Allow-Credentials": "true"
-                        }
-                    }
+                response.headers.set("Access-Control-Allow-Origin", origin);
+                response.headers.set("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+                response.headers.set("Access-Control-Allow-Headers", "Origin, X-Api-Key, X-Requested-With, Content-Type, Accept, Authorization");
+                if (option?.credentials) {
+                    response.headers.set("Access-Control-Allow-Credentials", "true");
                 }
                 if (event.request.method === "OPTIONS") {
-                    event.setHeaders(event.locals.headers);
-                    return new Response(null, {
-                        status: 204,
-                        headers: event.locals.headers
+                    return new Response(response.body, {
+                        ...response,
+                        status: 204
                     });
                 }
             }
 
-            return await resolve(event);
+            return response;
         }
         return handle;
     }
@@ -118,7 +106,54 @@ export namespace Hooks {
      * 특정 경로 요청 권한 체크
      */
     export function checkPermissions(options: PermissionCheckerOption[]): Handle {
-        return sequence(...options.map(option => createPermissionChecker(option.path, option.level, option.rule, option.redirectPath)))
+        return async ({ event, resolve }) => {
+            const { locals, url } = event;
+
+            let passed = false;
+            let path: string | undefined;
+            let redirectPath: string | undefined;
+            for (const option of options) {
+                if (checkPermission(option.path, option.level, option.rule, url, locals.userData)) {
+                    passed = true;
+                    break;
+                }
+                else {
+                    path = option.path ?? path;
+                    redirectPath = option.redirectPath ?? redirectPath
+                }
+            }
+
+            if (passed) {
+                return await resolve(event)
+            }
+            else if (redirectPath) {
+                const param = new URLSearchParams({
+                    redirect_to: url.origin + (path ?? '')
+                }).toString()
+
+                throw redirect(302, url.origin + redirectPath + "?" + param)
+            } else {
+                throw error(403, "You have no permission to access to this page");
+            }
+        }
+    }
+
+    function checkPermission(path: string, level: number, rule: 'match' | 'startsWith', url: URL, userData: User.Data | null): boolean {
+        if (rule === "match" && url.pathname !== path) {
+            return true;
+        }
+        if (rule == "startsWith" && !url.pathname.startsWith(path)) {
+            return true;
+        }
+
+        if (!userData) {
+            return false;
+        }
+        if (userData.grade < level) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -126,6 +161,10 @@ export namespace Hooks {
      */
     export const getUserData: Handle = async ({ event, resolve }) => {
         if (event.locals.user) {
+            if (await User.Server.DBController.checkAuthBanned(event.locals.user.provider, event.locals.user.providerId)) {
+                User.Server.logout(event);
+                throw error(499);
+            }
             let userData = await User.Server.DBController.getDataByProvider(event.locals.user.provider, event.locals.user.providerId);
             if (!userData) {
                 userData = await User.Server.DBController.createData(event.locals.user.provider, event.locals.user.providerId, event.locals.user.providerUserData ?? null)
@@ -152,49 +191,9 @@ export namespace Hooks {
         return await resolve(event);
     }
 
-    function createPermissionChecker(path: string, level: number, rule: 'match' | 'startsWith', redirectPath?: string): Handle {
-        return async function (input) {
-            const { locals, url } = input.event;
-
-            switch (rule) {
-                case ("match"): {
-                    if (url.pathname !== path) {
-                        return await input.resolve(input.event);
-                    }
-                    break;
-                }
-                case ("startsWith"): {
-                    if (!url.pathname.startsWith(path)) {
-                        return await input.resolve(input.event);
-                    }
-                    break;
-                }
-            }
-
-            if (!locals.user) {
-                if (!redirectPath) {
-                    throw error(403, "You have no permission to access to this page");
-                }
-
-                const param = new URLSearchParams({
-                    redirect_to: url.origin + path
-                }).toString()
-
-                throw redirect(302, url.origin + redirectPath + "?" + param)
-            }
-
-            if (!locals.userData) {
-                throw error(403, "You have no permission to access to this page");
-            }
-
-            if (locals.userData.grade < level) {
-                throw error(401, "You have no permission to access to this page");
-            }
-
-            return await input.resolve(input.event);
-        }
-    }
-
+    /*
+    외부 문서 업로더 서버 이용
+    */
     export const docRedirect: Handle = async ({ event, resolve }) => {
         if (event.url.pathname === '/api/doc/create') {
             throw redirect(308, 'https://file.taiko.wiki/doc/create');
@@ -203,6 +202,16 @@ export namespace Hooks {
             throw redirect(308, 'https://file.taiko.wiki/doc/update');
         }
 
+        return await resolve(event);
+    }
+
+    /**
+     * rating.taiko.wiki 사용
+     */
+    export const ratingRedirect: Handle = async ({ event, resolve }) => {
+        if (event.url.pathname.startsWith('/rating')) {
+            throw redirect(301, 'https://rating.taiko.wiki')
+        }
         return await resolve(event);
     }
 }

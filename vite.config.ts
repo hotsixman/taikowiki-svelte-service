@@ -4,6 +4,9 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
 	plugins: [sveltekit(), mkcert()],
+	build: {
+		target: 'esnext'
+	},
 	test: {
 		include: ['src/**/*.{test,spec}.{js,ts}']
 	},
@@ -20,5 +23,8 @@ export default defineConfig({
         rewrite: (path) => path.replace(/^\/hiroimg/, '')
       },
 		},
+	},
+	build: {
+		target: 'esnext'
 	}
 });

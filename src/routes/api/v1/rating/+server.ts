@@ -1,9 +1,10 @@
 import { User } from '$lib/module/user/index.js';
 import '$lib/module/user/user.server.js';
 import { error } from '@sveltejs/kit';
-import { queryBuilder, runQuery, Where } from '@yowza/db-handler';
+import { Util } from '$lib/module/util/util.server';
+import type { RequestEvent } from './$types';
 
-export async function GET({ url, request, setHeaders, locals }) {
+export async function GET({ url, request, setHeaders }: RequestEvent) {
     const ratingdata = url.searchParams.get('ratingdata');
 
     const apiKey = request.headers.get('x-api-key');
@@ -12,41 +13,50 @@ export async function GET({ url, request, setHeaders, locals }) {
     const UUID = await User.Server.apiKeyDBController.checkKey(apiKey);
     if (!UUID) throw error(403);
 
-    if (ratingdata === 'top50' || ratingdata === 'all') {
-        var query = queryBuilder
-            .select('user/donder_data', ['donder', 'currentRating', 'ratingData'])
-            .where(Where.Compare('UUID', '=', UUID))
-            .build();
+    const profileResponse = await Util.Server.dbMaster.func.simpleProfile(UUID);
+    if (profileResponse.status === "error") {
+        console.error(profileResponse)
+        throw error(500);
     }
-    else {
-        var query = queryBuilder
-            .select('user/donder_data', ['donder', 'currentRating'])
-            .where(Where.Compare('UUID', '=', UUID))
-            .build();
+    const profile = profileResponse.data[0];
+    if (!profile) {
+        throw error(204);
     }
+    profile.mydon = `https://img.taiko-p.jp/imgsrc.php?v=&kind=mydon&fn=mydon_${profile.taikoNumber}`;
+    const currentRating = profile.currentRatingScore;
+    delete profile?.UUID;
+    delete profile?.currentRatingScore;
+    delete profile?.lastUpload;
 
-    const data = await runQuery(async (run) => {
-        return await run(query);
-    }).then(result => {
-        if (result?.[0]) {
-            const data = result[0];
-            data.donder = JSON.parse(data.donder);
-            if ("ratingData" in data) {
-                data.ratingData = JSON.parse(data.ratingData);
-            }
-            return data;
+    const data = {
+        donder: profile,
+        currentRating,
+    } as any;
+
+    if (ratingdata === "top50") {
+        const songRatingDatasResponse = await Util.Server.dbMaster.func.songRatingDatas(UUID, false);
+        if (songRatingDatasResponse.status === "error") {
+            throw error(500);
         }
-        return null;
-    });
-
-    if (!data) throw error(404);
-
-    if (ratingdata === 'top50' && "ratingData" in data) {
-        data.ratingData = data.ratingData.slice(0, 50);
+        data.songRatingDatas = songRatingDatasResponse.data.map((e) => {
+            delete e?.UUID;
+            delete e?.lastUpload;
+            return e;
+        });
+    }
+    else if (ratingdata === "all") {
+        const songRatingDatasResponse = await Util.Server.dbMaster.func.songRatingDatas(UUID, true);
+        if (songRatingDatasResponse.status === "error") {
+            throw error(500);
+        }
+        data.songRatingDatas = songRatingDatasResponse.data.toSorted((a, b) => b.ratingScore - a.ratingScore).map((e) => {
+            delete e?.UUID;
+            delete e?.lastUpload;
+            return e;
+        });
     }
 
     setHeaders({
-        ...locals.headers,
         'Content-Type': 'application/json'
     })
 
