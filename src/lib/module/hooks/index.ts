@@ -139,17 +139,17 @@ export namespace Hooks {
     }
 
     function checkPermission(path: string, level: number, rule: 'match' | 'startsWith', url: URL, userData: User.Data | null): boolean {
-        if(rule === "match" && url.pathname !== path){
+        if (rule === "match" && url.pathname !== path) {
             return true;
         }
-        if(rule == "startsWith" && !url.pathname.startsWith(path)){
+        if (rule == "startsWith" && !url.pathname.startsWith(path)) {
             return true;
         }
 
-        if(!userData){
+        if (!userData) {
             return false;
         }
-        if(userData.grade < level){
+        if (userData.grade < level) {
             return false;
         }
 
@@ -188,6 +188,30 @@ export namespace Hooks {
             });
         }
 
+        return await resolve(event);
+    }
+
+    /*
+    외부 문서 업로더 서버 이용
+    */
+    export const docRedirect: Handle = async ({ event, resolve }) => {
+        if (event.url.pathname === '/api/doc/create') {
+            throw redirect(308, 'https://file.taiko.wiki/doc/create');
+        }
+        else if (event.url.pathname === "/api/doc/update") {
+            throw redirect(308, 'https://file.taiko.wiki/doc/update');
+        }
+
+        return await resolve(event);
+    }
+
+    /**
+     * rating.taiko.wiki 사용
+     */
+    export const ratingRedirect: Handle = async ({ event, resolve }) => {
+        if (event.url.pathname.startsWith('/rating')) {
+            throw redirect(301, 'https://rating.taiko.wiki')
+        }
         return await resolve(event);
     }
 }
