@@ -138,22 +138,22 @@ export namespace Hooks {
         }
     }
 
-    function checkPermission(path: string, level: number, rule: 'match' | 'startsWith', url: URL, userData: User.Data | null): boolean {
+    function checkPermission(path: string, level: number, rule: 'match' | 'startsWith', url: URL, userData: User.Data | null): number {
         if (rule === "match" && url.pathname !== path) {
-            return true;
+            return 0;
         }
         if (rule == "startsWith" && !url.pathname.startsWith(path)) {
-            return true;
+            return 0;
         }
 
         if (!userData) {
-            return false;
+            return 2;
         }
         if (userData.grade < level) {
-            return false;
+            return 2;
         }
 
-        return true;
+        return 1;
     }
 
     /**
