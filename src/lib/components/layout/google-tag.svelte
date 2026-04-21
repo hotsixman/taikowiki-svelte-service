@@ -17,10 +17,12 @@
     });
 
     afterNavigate((nav) => {
-        gtag("config", "G-S8TRY8QPYG", {
-            page_title: document.title,
-            page_path: nav.to.url.pathname,
-        });
+        if (nav.type !== "enter" && typeof window.gtag === "function") {
+            window.gtag("config", "G-S8TRY8QPYG", {
+                page_title: document.title,
+                page_path: nav.to.url.pathname,
+            });
+        }
     });
 </script>
 
@@ -35,6 +37,7 @@
         function gtag() {
             dataLayer.push(arguments);
         }
+        window.gtag = gtag;
         gtag("js", new Date());
 
         gtag("config", "G-S8TRY8QPYG");
