@@ -129,8 +129,6 @@ export class WikiAnnotationElement extends LitElement {
                 box-sizing: border-box;
                 padding-inline: 5px;
                 padding-block: 2px;
-                border: 1px solid black;
-                background-color: white;
                 word-break: keep-all;
                 word-wrap: break-word;
                 width: max-content;
@@ -142,9 +140,15 @@ export class WikiAnnotationElement extends LitElement {
                 display:block;
             }
             */
+            .content-container[data-theme="light"]{
+                border: 1px solid black;
+                background-color: white;
+                color: black;
+            }
             .content-container[data-theme="dark"]{
                 border: 1px solid gray;
                 background-color: black;
+                color: white;
             }
             .content-flag{
                 cursor: pointer;
@@ -579,6 +583,8 @@ export class WikiLink extends WikiLinkBase {
 export class WikiSong extends WikiLinkBase {
     @property({ attribute: 'songno', type: String })
     songNo?: string;
+    @property({ attribute: 'diff', type: String })
+    diff?: string;
     @property({ attribute: 'songtitle', type: String })
     songtitle?: string;
 
@@ -587,11 +593,16 @@ export class WikiSong extends WikiLinkBase {
             return '';
         }
 
-        const url = new URL(location.href);
+        const url = new URL(location.origin);
         url.pathname = `/song/${encodeURIComponent(this.songNo)}`;
-        for(const key of url.searchParams.keys()){
+        for (const key of url.searchParams.keys()) {
             url.searchParams.delete(key)
         }
+
+        if (this.diff && ['easy', 'normal', 'hard', 'oni', 'ura'].includes(this.diff)) {
+            url.searchParams.set('diff', this.diff)
+        }
+
         return url.href;
     }
 
