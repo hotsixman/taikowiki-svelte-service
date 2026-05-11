@@ -4,7 +4,7 @@
     import { getContext, onMount } from "svelte";
 
     /**@type {import('svelte/store').Writable<{ logined: boolean; nickname: string; UUID: string | null }>}*/
-    const user = getContext('user');
+    const user = getContext("user");
 
     onMount(() => {
         (function (w, d, s, l, i) {
@@ -24,6 +24,7 @@
             window.gtag("config", "G-S8TRY8QPYG", {
                 page_title: document.title,
                 page_path: nav.to.url.pathname,
+                uuid: $user.UUID
             });
         }
     });
@@ -35,15 +36,13 @@
         async
         src="https://www.googletagmanager.com/gtag/js?id=G-S8TRY8QPYG"
     ></script>
-    <svelte:element this={"script"}>{`
-    window.dataLayer = window.dataLayer || [];
-    function gtag() {
-        dataLayer.push(arguments);
-    }
-    window.gtag = gtag;
-    gtag("js", new Date());
-    gtag("config", "G-S8TRY8QPYG", {
-        'user_id': "${$user.UUID}"
-    });
-    `}</svelte:element>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() {
+            dataLayer.push(arguments);
+        }
+        window.gtag = gtag;
+        gtag("js", new Date());
+        gtag("config", "G-S8TRY8QPYG");
+    </script>
 </svelte:head>
