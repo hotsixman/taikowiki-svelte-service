@@ -5,13 +5,15 @@ import { UAParser } from "ua-parser-js";
 import { isbot } from "isbot";
 import pkg from "../../../package.json";
 import { Util } from '$lib/module/util/util.server';
+import type { RequestEvent } from "./$types";
 const { getClientAddress } = Util.Server;
 
-export async function load(event) {
+export async function load(event: RequestEvent) {
     const { locals, request, cookies } = event;
     const user = {
         logined: !!locals.userData,
         nickname: !!locals.userData ? locals.userData.nickname : getClientAddress(event),
+        UUID: !!locals.userData ? locals.userData.UUID : null,
     };
     const isAdmin = locals.userData ? locals.userData.grade >= 9 : false;
 

@@ -86,7 +86,7 @@
     setContext("asideElement", writable<HTMLElement>());
 
     //user
-    const user = writable<{ logined: boolean; nickname: string }>(data.user);
+    const user = writable<{ logined: boolean; nickname: string; UUID: string | null }>(data.user);
     setContext("user", user);
 
     //page scroll
