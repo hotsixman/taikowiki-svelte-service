@@ -25,7 +25,7 @@ export namespace Doc {
         'text': ['color', 'bgcolor', 'size'],
         'wiki-annot': ['key'],
         'wiki-link': ['doctitle'],
-        'wiki-song': ['songno'],
+        'wiki-song': ['songno', 'diff'],
         'wiki-yt': ['v', 'width', 'height'],
         'wiki-float': ['float'],
         'style-table': ['bordercolor', 'bgcolor', 'textcolor', 'width', 'minwidth', 'maxwidth', 'height', 'minheight', 'maxheight', 'float', 'align', 'overflow'],
