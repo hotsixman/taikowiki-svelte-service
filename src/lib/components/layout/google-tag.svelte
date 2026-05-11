@@ -20,13 +20,11 @@
     });
 
     afterNavigate((nav) => {
-        if (nav.type !== "enter" && typeof window.gtag === "function") {
-            window.gtag("config", "G-S8TRY8QPYG", {
-                page_title: document.title,
-                page_path: nav.to.url.pathname,
-                uuid: $user.UUID
-            });
-        }
+        window.gtag?.("config", "G-S8TRY8QPYG", {
+            page_title: document.title,
+            page_path: nav.to.url.pathname,
+            user_id: $user.UUID ?? "null",
+        });
     });
 </script>
 
@@ -43,6 +41,5 @@
         }
         window.gtag = gtag;
         gtag("js", new Date());
-        gtag("config", "G-S8TRY8QPYG");
     </script>
 </svelte:head>
