@@ -20,13 +20,18 @@
     });
 
     afterNavigate((nav) => {
-        window.gtag?.('set', "G-S8TRY8QPYG",{
-            user_id: $user.UUID ?? "null"
+        window.gtag?.("set", "G-S8TRY8QPYG", {
+            user_id: $user.UUID ?? "null",
+            uuid: $user.UUID ?? "null",
+        });
+        window.gtag?.("set", "uuid", {
+            uuid: user.UUID ?? "null",
         });
         window.gtag?.("config", "G-S8TRY8QPYG", {
             page_title: document.title,
             page_path: nav.to.url.pathname,
             user_id: $user.UUID ?? "null",
+            uuid: $user.UUID ?? "null",
         });
     });
 </script>
