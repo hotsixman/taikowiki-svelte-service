@@ -20,6 +20,9 @@
     });
 
     afterNavigate((nav) => {
+        window.gtag?.('set', {
+            user_id: $user.UUID ?? "null"
+        });
         window.gtag?.("config", "G-S8TRY8QPYG", {
             page_title: document.title,
             page_path: nav.to.url.pathname,
