@@ -20,7 +20,7 @@
     });
 
     afterNavigate((nav) => {
-        window.gtag?.('set', {
+        window.gtag?.('set', "G-S8TRY8QPYG",{
             user_id: $user.UUID ?? "null"
         });
         window.gtag?.("config", "G-S8TRY8QPYG", {
